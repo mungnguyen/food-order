@@ -10,13 +10,13 @@ export default {
     return {
       items: [
         {
-          src: "/images/food-order-slider-1.jpg"
+          src: "/images/Slider/food-order-slider-1.jpg"
         },
         {
-          src: "/images/food-order-slider-2.jpg"
+          src: "/images/Slider/food-order-slider-2.jpg"
         },
         {
-          src: "/images/food-order-slider-3.jpg"
+          src: "/images/Slider/food-order-slider-3.jpg"
         }
       ]
     };
