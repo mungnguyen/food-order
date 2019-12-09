@@ -35,14 +35,14 @@
             </template>
 
             <v-list dense>
-              <v-list-item v-for="(item, index) in items" :key="index" @click>
+              <v-list-item v-for="(item, index) in items" :key="index" >
                 <v-menu open-on-hover offset-x>
                   <template v-slot:activator="{ on }">
                     <div v-on="on">{{ item.title }}</div>
                   </template>
 
                   <v-list dense>
-                    <v-list-item v-for="(el, index) in items" :key="index" @click>
+                    <v-list-item v-for="(el, index) in items" :key="index" >
                       <div text>{{ el.title }}</div>
                     </v-list-item>
                   </v-list>
@@ -58,22 +58,26 @@
         </div>
         <v-divider vertical light></v-divider>
 
-        <div class="text-transform-none">
-          <v-btn small color="#fff" text>Đăng kí</v-btn>
+         <div class="text-transform-none">
+           <v-flex>
+            <Register />
+          </v-flex>
         </div>
         <v-divider vertical light></v-divider>
 
         <div class="text-transform-none">
-          <v-btn small color="#fff" text>Đăng nhập</v-btn>
+           <v-flex>
+            <Login />
+          </v-flex>
         </div>
+        <v-divider vertical light></v-divider>
       </v-toolbar-items>
 
-      <v-badge color="#e49f02">
-        <template v-slot:badge>0</template>
-        <v-icon color="#fff">mdi-cart</v-icon>
+      <v-badge>
+        <Cart />
       </v-badge>
-
-      <v-spacer />
+         
+     
     </v-app-bar>
 
     <v-content>
@@ -85,6 +89,9 @@
 </template>
 
 <script>
+import Login from '../components/Login'
+import Register from '../components/Register'
+import Cart from '../components/Cart'
 export default {
   props: {
     source: String
@@ -100,6 +107,12 @@ export default {
         { title: "Click Me 4" }
       ]
     };
+  },
+  components: {
+    Login,
+    Register,
+    Cart
+
   }
 };
 </script>
