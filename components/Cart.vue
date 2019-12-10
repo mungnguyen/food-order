@@ -30,7 +30,8 @@
                 <v-btn min-width="0.5rem" >
                   <span>{{ item.quantity }}</span>
                 </v-btn>
-                <v-btn @click="incrementItemQuantity()" min-width="0.5rem">
+                <v-btn
+                 min-width="0.5rem">
                   <span>+</span>
                 </v-btn>
               </v-btn-toggle>
@@ -56,7 +57,7 @@
     </v-card>
     <v-card v-else>
       <v-img
-      src="https://www.tangerineworld.com/web_theme/images/empty-cart.png "
+      src="require('@_static/images/emptycart.png')"
       width="300"
       ></v-img>
     </v-card>
@@ -64,7 +65,8 @@
 </template>
 <script>
   export default {
-    data: () => ({
+    data () {
+      return{
       foodList: [
         {
           src: "/images/NewFood/food-4.jpg",
@@ -92,7 +94,8 @@
           quantity: "1"
         }
       ]
-    })
+    }
+    }
   }
 </script>
 
