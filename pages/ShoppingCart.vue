@@ -11,13 +11,13 @@
                    <v-col cols="2">
                      <v-checkbox v-model="storeName" class="mx-2"  ></v-checkbox>
                   </v-col> 
-                  <v-col cols="6" class="text-left">
+                  <v-col cols="6" class="text-center">
                     {{ item.store_name}}
                   </v-col>
                   </v-row>
                  </th>
             </thead>
-            <tbody>
+            <tbody></tbody>
               <tr >
                 <td class="text-center mx-auto">
                   <v-img class="mx-auto" max-width="150px" max-height="150px" :src="item.src"></v-img>

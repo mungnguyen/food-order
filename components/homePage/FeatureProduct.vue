@@ -7,7 +7,7 @@
     </h2>
     <v-divider></v-divider>
     <v-row>
-      <v-col cols="6" v-for="(item, index) in foodList" :key="index">
+      <v-col cols="4" v-for="(item, index) in foodList" :key="index">
         <v-card shaped>
           <v-row>
             <v-col cols="4">
@@ -44,6 +44,16 @@ export default {
         },
         {
           src: "/images/NewFood/food-1.jpg",
+          name: "Whitehaven Beach",
+          price: "120.000"
+        },
+        {
+          src: "/images/NewFood/food-2.jpg",
+          name: "Whitehaven Beach",
+          price: "120.000"
+        },
+        {
+          src: "/images/NewFood/food-3.jpg",
           name: "Whitehaven Beach",
           price: "120.000"
         },
