@@ -46,7 +46,16 @@ module.exports = {
      ** Axios module configuration
      ** See https://axios.nuxtjs.org/options
      */
-    axios: {},
+    axios: {
+        proxy: 'true'
+    },
+
+    proxy: {
+        '/api/': {
+            target: 'https://ptpmcn-08.herokuapp.com/',
+            pathRewrite: { '/api/': '' }
+        }
+    },
     /*
      ** vuetify module configuration
      ** https://github.com/nuxt-community/vuetify-module

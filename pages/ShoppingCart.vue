@@ -1,122 +1,137 @@
 
 <template>
-  <v-container v-if="foodList.length > 0">
-    <v-row justify="center">
-      <v-col cols="10">
-        <v-card color="white">
-          <v-simple-table dense v-for="item in foodList" :key="item.id">
+  <v-container  v-if="foodList.length > 0">
+        <div > 
+          <v-card shaped>
+          <v-card-title class="layout justify-center" color="orange darken-2">
+           <span class="headline">Giỏ hàng</span> 
+          </v-card-title>
+          <v-divider vertical light></v-divider>
+          <v-simple-table dense >
+            
             <thead>
-                 <th>
-                   <v-row>
-                   <v-col cols="2">
-                     <v-checkbox v-model="storeName" class="mx-2"  ></v-checkbox>
-                  </v-col> 
-                  <v-col cols="6" class="text-left">
-                    {{ item.store_name}}
-                  </v-col>
-                  </v-row>
-                 </th>
-            </thead>
-            <tbody>
-              <tr >
-                <td class="text-center mx-auto">
-                  <v-img class="mx-auto" max-width="150px" max-height="150px" :src="item.src"></v-img>
-                </td>
-                <td class="text-center">{{ item.name }}</td>
+              <th class="text-center">Hình ảnh</th>
+              <th class="text-left">Tên món</th>
+              <th class="text-center">Số lượng</th>
+              <th class="text-center">Giá món</th>
 
-                <td class="text-center">{{ item.price}}VNĐ</td>
+            </thead>
+            <tbody  v-for="dish in foodList" :key="dish.id">
+              <tr >
+                <td class="text-center mx-auto"> 
+                  <v-img class="mx-auto" max-width="150px" max-height="150px" :src="dish.src"></v-img>
+                </td>
+                <td class="text-left">{{ dish.name }}</td>
+
                 <td class="text-center">
                   <v-card flat class="py-12">
-                    <v-card-text style="padding-top: 0px">
-                      <v-row align="center" justify="center">
-                        <v-col cols="10"></v-col>
+                    <v-card-text >
                         <v-btn-toggle dense>
-                          <v-btn
-                            :disabled="item.quantity > 1 ? false : true"
-                            min-width="2rem"
-                          >
+                          <v-btn min-width="10px" @click="decrementQuantity({id: dish.id})">
                             <span>-</span>
                           </v-btn>
-                          <v-btn disabled min-width="2rem">
-                            <span> {{ item.quantity }} </span>
+                          <v-btn  min-width="10px">
+                            <span> {{ dish.quantity }} </span>
                           </v-btn>
-                          <v-btn
-                            min-width="2rem"
-                          > 
+                          <v-btn min-width="10px" @click="incrementQuantity({id: dish.id})">
                             <span>+</span>
                           </v-btn>
                         </v-btn-toggle>
-                      </v-row>
                     </v-card-text>
                   </v-card>
                 </td>
+                <td class="text-center">{{ dish.price}}VNĐ</td>
+
                 <td class="text-center">
-                  <v-btn text color="red" >
-                    <v-icon>mdi-delete</v-icon>
+                  <v-btn depressed color="error" @click="removeDish({id: dish.id})">
+                    <v-icon left >mdi-delete</v-icon>
+                    Delete
                   </v-btn>
                 </td>
               </tr>
             </tbody>
-            <tfoot>
-              <td class="text-center">
-                <v-card-text >
-                  <b>Tổng tiền:</b>
-                </v-card-text>
-              </td>
-            </tfoot>
           </v-simple-table>
-          <v-col class="mx-auto pt-0 px-0 mx-auto pt-0">
-            <v-card-actions>
-              <v-btn exact
-                color="orange darken-2"
-                dark
-                class="mx-auto"
-                :disabled="!foodList.length"
-              >Thanh toán</v-btn>
-            </v-card-actions>
-          </v-col>
         </v-card>
-      </v-col>
-    </v-row>
+        </div>
+         <v-card-actions>
+              <v-btn exact
+               to="/PaymentPage"
+               color="deep-orange"
+               dark
+               class="mx-auto"
+              >Tiến hành thanh toán</v-btn>
+            </v-card-actions>
   </v-container>
-  <v-card v-else flat height="100%" class="pt-10">
+  <v-container v-else>
     <v-img
       class="white--text mx-auto"
       max-width="300"
       max-height="300"
       src="https://www.tangerineworld.com/web_theme/images/empty-cart.png"
     ></v-img>
-  </v-card>
+  </v-container>
 </template>
 <script>
+import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
       dialog: false,
-      storeName: false,
+      
       foodList: [
         {
           id: 1,
           src: "/images/NewFood/food-4.jpg",
           name: "Whitehaven Beach",
           price: "120000",
-          quantity: "1",
-          store_name: "Quán ăn ngon"
+          quantity: "1"
         },
         {
           id: 2,
           src: "/images/NewFood/food-1.jpg",
           name: "Whitehaven Beach",
           price: "120000",
-          quantity: "1",
-          store_name: "Món ăn Việt"
+          quantity: "1"
         },
-        
-      ],
+        {
+          id: 3,
+          src: "/images/NewFood/food-2.jpg",
+          name: "Whitehaven Beach",
+          price: "120000",
+          quantity: "1"
 
+        },
+        {
+          id: 4,
+          src: "/images/NewFood/food-3.jpg",
+          name: "Whitehaven Beach",
+          price: "120000",
+          quantity: "1"
+        }
+      ]
+     
     };
   },
+  computed: {
+     ...mapState("shoppingCart",["foodList"])
+  },
+  methods: {
+    ...mapMutations("shoppingCart",[
+      "removeDish",
+      "decrementQuantity",
+      "incrementQuantity",
+    ])
+  }
  
-};
+}
+
 </script>
+<style scoped>
+.layout {
+  color: orange
+}
+ .v-data-table th {
+   font-size: 15px
+ }
+</style>
 

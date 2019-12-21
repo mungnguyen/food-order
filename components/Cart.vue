@@ -12,44 +12,42 @@
     </template>
     <v-card v-if="foodList.length > 0" :width="500">
       <v-container>
-        <h2 class="layout justify-center" color="orange darken-2">Shopping Cart</h2>
-      <v-row v-for="(item, index) in foodList" :key="index">
+       <v-card-title class="layout justify-center" color="orange darken-2">
+           <span class="headline">Giỏ hàng</span> 
+       </v-card-title>
+      <v-row v-for="dish in foodList" :key="dish.id">
         
           <v-col cols="2">
-            <v-img :src="item.src" :width="50" :height="50"></v-img>
+            <v-img :src="dish.src" :width="50" :height="50"></v-img>
           </v-col>
              
-          <v-col cols="2"> {{item.name}} </v-col>
-           <v-col cols="2">{{item.price}} </v-col>
-           <v-col cols="3">
-             <!-- {{item.quantity}} -->
-             <v-btn-toggle dense>
-                <v-btn min-width="0.5rem">
-                  <span>-</span>
-                </v-btn>
-                <v-btn min-width="0.5rem" >
-                  <span>{{ item.quantity }}</span>
-                </v-btn>
-                <v-btn
-                 min-width="0.5rem">
-                  <span>+</span>
-                </v-btn>
-              </v-btn-toggle>
+          <v-col cols="4"> {{dish.name}} </v-col>
+           <v-col cols="2">{{dish.price}} </v-col>
+           <v-col cols="1">
+             {{dish.quantity}}
             </v-col>
           
 
-          <v-col cols="3">{{item.price * item.quantity}} VND </v-col>
+          <v-col cols="3">{{dish.price * dish.quantity}} VND </v-col>
 
         </v-row>
         <v-card-actions>
-          <v-col cols="3"></v-col>
           <v-col cols="8">
-          <v-btn
+            <v-btn
+            depressed
             color="orange darken-2"
-            class=" justify-center"
+            class="text-center"
+            :disabled="!foodList.length"
+            >Chi tiết giỏ hàng</v-btn>
+          </v-col>
+          <v-col cols="6">
+          <v-btn
+            depressed
+            color="orange darken-2"
+            class=" justify-right"
             :disabled="!foodList.length"
             
-          >Xem giỏ hàng và thanh toán</v-btn>
+          > Thanh toán</v-btn>
           </v-col>
          
         </v-card-actions>
@@ -69,18 +67,21 @@
       return{
       foodList: [
         {
+          id: 1,
           src: "/images/NewFood/food-4.jpg",
           name: "Whitehaven Beach",
           price: "120000",
           quantity: "1"
         },
         {
+          id: 2,
           src: "/images/NewFood/food-1.jpg",
           name: "Whitehaven Beach",
           price: "120000",
           quantity: "1"
         },
         {
+          id: 3,
           src: "/images/NewFood/food-2.jpg",
           name: "Whitehaven Beach",
           price: "120000",
@@ -88,6 +89,7 @@
 
         },
         {
+          id: 4,
           src: "/images/NewFood/food-3.jpg",
           name: "Whitehaven Beach",
           price: "120000",
