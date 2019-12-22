@@ -66,7 +66,7 @@
   </v-row>
 </template>
 <script>
-
+import { mapState, mapActions } from "vuex";
   export default {
     data() {
       return{
@@ -91,27 +91,10 @@
     ]
       }
     },
-   
-    methods: {
-      validate () {
-            if (this.$refs.form.validate()) {
-              this.snackbar = true
-            }
-          },
-      ForgetPasswordPage(){
-
-      },
-      // dangnhap() {
-      //   let data = {
-      //     user: '',
-      //     pass: ''
-      //     let result = api(user, pass);
-      //     if(result) {
-      //       ale
-      //     }
-      //   }
-      // }
+    computed: {
+      ...mapState
     }
+   
   }
   
 </script>

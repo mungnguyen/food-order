@@ -73,6 +73,7 @@
     data() {
       return {
       dialog: false,
+      displayPassword: false,
       email: '',
       emailRules: [
         v => !!v || 'E-mail is required',

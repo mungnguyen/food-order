@@ -2,18 +2,18 @@
   <div class="new-food">
     <h2>
       <center>
-        <v-icon>mdi-food</v-icon>&nbsp;Món ngon hôm nay
+        <v-icon>mdi-food</v-icon>&nbsp;Gợi ý cho bạn
       </center>
     </h2>
     <v-divider></v-divider>
     <v-row>
-      <v-col cols="3" md="3" v-for="(item, index) in foodList" :key="index">
+      <v-col cols="3" md="3" v-for="(item, index) in newStoreList" :key="index">
         <v-hover v-slot:default="{ hover }" :value="false">
           <v-card shaped :elevation="hover ? 12 : 2" width="90%">
             <div class="food-images">
               <center>
                 <v-avatar size="180" :elevation="hover ? 12 : 2">
-                  <v-img :src="item.src"></v-img>
+                  <v-img :src="item.url_image"></v-img>
                 </v-avatar>
               </center>
               <div class="food-menu">
@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -77,31 +78,12 @@ export default {
           icon: "mdi-cart-arrow-down",
           content: "Thêm vào giỏ hàng"
         }
-      ],
-
-      foodList: [
-        {
-          src: "/images/NewFood/food-4.jpg",
-          name: "Whitehaven Beach",
-          price: "120.000"
-        },
-        {
-          src: "/images/NewFood/food-1.jpg",
-          name: "Whitehaven Beach",
-          price: "120.000"
-        },
-        {
-          src: "/images/NewFood/food-2.jpg",
-          name: "Whitehaven Beach",
-          price: "120.000"
-        },
-        {
-          src: "/images/NewFood/food-3.jpg",
-          name: "Whitehaven Beach",
-          price: "120.000"
-        }
       ]
     };
+  },
+
+  computed: {
+    ...mapState("store", ["newStoreList"])
   }
 };
 </script>
