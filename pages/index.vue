@@ -2,8 +2,8 @@
   <div class="home">
     <Slider />
     <br />
-    <NewStore />
-    <StoreList />
+    <NewStore @showStore="handleChooseStore" />
+    <StoreList @showStore="handleChooseStore" />
 
     <div>
       <p>Store List</p>
@@ -35,7 +35,7 @@ export default {
       list: [
         {
           id: 1,
-          name: "ABC"
+          name: "Món ăn Việt - 80 Đại La"
         },
         {
           id: 2,
@@ -47,48 +47,65 @@ export default {
 
   computed: {
     ...mapState("store", ["newStoreList", "storeList"]),
-    ...mapState("breadcumbs", ["breadList"])
+    ...mapState("breadcumbs", ["breadList"]),
+    ...mapState("category", ["categoryList"])
   },
 
   // async asyncData({ store }) {
   //   try {
   //     await Promise.all([
   //       store.dispatch("store/getStoreList", { newStore: true }),
-  //       store.dispatch("store/getStoreList", { pageSize: 6 })
+  //       store.dispatch("store/getStoreList", { pageSize: 6 }),
+  //       store.dispatch("category/getCategoryList", { pageSize: 6 })
   //     ]);
   //   } catch (err) {
   //     console.log("indexAsyncData", err);
   //   }
   // },
 
-  // async created() {
-  //   if (!this.newStoreList.length || !this.storeList.length) {
-  //     await Promise.all([
-  //       this.getStoreList({ newStore: true }),
-  //       this.getStoreList({ pageSize: 6 })
-  //     ]);
-  //   }
-  // },
+  async created() {
+    if (
+      !this.newStoreList.length ||
+      !this.storeList.length ||
+      this.categoryList.length
+    ) {
+      await Promise.all([
+        this.getStoreList({ newStore: true }),
+        this.getStoreList({ pageSize: 6 }),
+        this.getCategoryList({ pageSize: 6 })
+      ]);
+    }
+  },
 
   mounted() {
     localStorage.setItem("cart", JSON.stringify({}));
+    console.log("agvds");
   },
 
   methods: {
     ...mapActions("store", ["getStoreList"]),
-    ...mapActions("breadcumbs", ["addBreadcumbs"]),
+    ...mapActions("breadcumbs", ["setBreadList"]),
+    ...mapActions("category", ["getCategoryList"]),
 
     handleChooseStore(item) {
       const id = this.breadList.length + 1;
-      const url = `/store/${id}`;
-      this.addBreadcumbs({ id, name: item.name, url });
-      this.$router.push(url);
+      const url = `/view-store/${item.id}`;
+      const breadList = [
+        {
+          id: 1,
+          name: "Trang chủ",
+          url: "/"
+        },
+        { id, name: item.name, url }
+      ];
+      this.setBreadList(breadList);
+      this.$router.push({ path: url });
     }
   }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .home {
   width: 100%;
 }

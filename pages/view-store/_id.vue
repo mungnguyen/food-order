@@ -9,7 +9,10 @@
         <div class="store" color="blue-dark">
           <v-breadcrumbs :items="breadList" divider=">>">
             <template v-slot:item="props">
-              <v-breadcrumbs-item @click="handleChooseBread(props.item)">{{ props.item.name }}</v-breadcrumbs-item>
+              <v-breadcrumbs-item
+                style="cursor: pointer; color: blue"
+                @click="handleChooseBread(props.item)"
+              >{{ props.item.name }}</v-breadcrumbs-item>
             </template>
           </v-breadcrumbs>
         </div>
@@ -34,16 +37,16 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="3">
-        <v-card shaped >
-          <v-card-title class="layout justify-center" color="orange darken-2">
-            <span class="headline"> Danh mục cửa hàng</span>
+      <v-col cols="2">
+        <v-card shaped>
+          <v-card-title class="layout justify-center">
+            <span class="headline">Thực đơn</span>
           </v-card-title>
-      
-        <v-spacer></v-spacer>
-        <v-card-actions v-for="(item,index) in categories" :key="index">
-          <span>{{item.name}}</span>
-        </v-card-actions>
+
+          <v-spacer></v-spacer>
+          <v-card-actions v-for="(item,index) in categories" :key="index">
+            <span class="text-center" color>{{item.name}}</span>
+          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
@@ -69,10 +72,10 @@ export default {
       },
       categories: [
         {
-          name: "Món chay"
+          name: "MÓN BÁNH"
         },
         {
-          name: "Món bánh"
+          name: "MÓN CHÈ"
         }
       ]
     };
@@ -120,5 +123,8 @@ export default {
   font-size: 13px;
   margin-bottom: 2px;
   font-weight: 300;
+}
+.v-card__title {
+  color: "orange darken-2";
 }
 </style>

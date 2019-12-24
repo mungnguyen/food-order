@@ -4,10 +4,15 @@ export const state = () => {
     return {
         api: {
             store: "/api/store",
-            allStore: "/api/getAllStore"
+            allStore: "/api/getAllStore",
+            inforStore: "/api/store/id"
+
         },
         storeList: [],
         newStoreList: [],
+        inforStore: [],
+        viewStore: {},
+
         pagination: {
             page: 0,
             pageSize: 0,
@@ -17,42 +22,44 @@ export const state = () => {
 }
 
 export const mutations = {
-    SET_NEW_DISH: set("newStoreList"),
-    SET_DISH_LIST: set("storeList"),
+    SET_NEW_STORE: set("newStoreList"),
+    SET_STORE_LIST: set("storeList"),
+    SET_VIEW_STORE: set("viewStore"),
     SET_PAGINATION: set("pagination"),
+    SET_INFOR_STORE: set("inforStore"),
 
-    ADD_DISH: add("storeList"),
-    UPDATE_DISH: update("storeList"),
-    REMOVE_DISH: remove("storeList"),
-    REMOVE_MULTI_DISH: removeByIds("storeList")
+    ADD_STORE: add("storeList"),
+    UPDATE_STORE: update("storeList"),
+    REMOVE_STORE: remove("storeList"),
+    REMOVE_MULTI_STORE: removeByIds("storeList")
 }
 
 export const actions = {
     async getStoreList({ state, commit }, payload = { newStore: false }) {
-        const { allStore } = state.api
+        const { store } = state.api
 
         payload.newStore = payload.newStore ? true : false
         payload.page = payload.page !== undefined ? payload.page : 0
         payload.pageSize = payload.pageSize !== undefined ? payload.pageSize : payload.newStore ? 4 : 20
 
         try {
-            const data = await this.$axios.$get(allStore, {
+            const data = await this.$axios.$get(store, {
                 params: {
                     page: payload.page,
                     pageSize: payload.pageSize
                 }
             })
 
-            if (data.storees) {
+            if (data.rows) {
                 console.log()
                 if (payload.newStore) {
-                    commit("SET_NEW_DISH", data.storees.rows)
+                    commit("SET_NEW_STORE", data.rows)
                 } else {
-                    commit("SET_DISH_LIST", data.storees.rows)
+                    commit("SET_STORE_LIST", data.rows)
                     commit("SET_PAGINATION", {
-                        page: data.storees.page,
-                        pageSize: data.storees.pageSize,
-                        total: data.storees.count
+                        page: data.page,
+                        pageSize: data.pageSize,
+                        total: data.count
                     })
                 }
             }
@@ -60,6 +67,24 @@ export const actions = {
             console.log("getNewStoreList", err)
         }
     },
+
+    viewStore({ state, commit }, storeId) {
+        const { store } = state.api
+
+        try {
+            const data = this.$axios.get(`${store}/${storeId}`)
+            if (data) {
+                commit("SET_VIEW_STORE", data)
+            }
+        } catch (err) {
+            console.log("viewStore-store", data)
+        }
+    }
+
+    // async getInforStore({state,commit},id) {
+    //     const {inforStore} = state.api
+
+    // }
 
 
 

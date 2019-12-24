@@ -25,9 +25,13 @@
                   color="orange"
                   size="20px"
                 ></v-rating>
-                <p :class="{'food-name': true}">{{item.name}}}</p>
+                <p
+                  :class="{'food-name': true}"
+                  style="cursor: pointer"
+                  @click="$emit('showStore', item)"
+                >{{item.name}}</p>
                 <!-- <p>Số 1, Tạ Quang Bửu, Hai Bà Trưng, Hà Nội</p> -->
-                <p :class="{'food-price': true}">{{ item.price }} VND</p>
+                <p :class="{'food-price': true}">{{ item.address }}</p>
                 <v-btn small rounded color="#e49f02">Thêm vào giỏ hàng</v-btn>
               </v-col>
             </v-row>
@@ -59,16 +63,13 @@ export default {
     ...mapState("store", ["storeList", "pagination"]),
 
     paginationValue() {
-      // const page = Number(this.pagination.page) + 1;
-      // const length =
-      //   Number(this.pagination.total) / Number(this.pagination.pageSize) + 1;
-      // return {
-      //   page: page,
-      //   length: length
-      // };
+      const page = Number(this.pagination.page) + 1;
+      const length = Math.ceil(
+        Number(this.pagination.total) / Number(this.pagination.pageSize)
+      );
       return {
-        page: 0,
-        length: 6
+        page: page,
+        length: length
       };
     }
   },

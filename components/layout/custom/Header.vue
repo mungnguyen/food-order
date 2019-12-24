@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app clipped-left color="#000">
+  <v-app-bar app clipped-left color="#000" class="custom-header">
     <v-app-bar-nav-icon style="color: #fff" @click="drawer = !drawer" />
     <span class="title ml-3 mr-5" style="color: #fff">
       B-
@@ -18,7 +18,9 @@
     <v-spacer />
     <v-toolbar-items>
       <div class="text-transform-none">
-        <v-btn color="#fff" small text>Trang chủ</v-btn>
+        <NuxtLink to="/">
+          <v-btn color="#fff" small text>Trang chủ</v-btn>
+        </NuxtLink>
       </div>
       <v-divider vertical light></v-divider>
 
@@ -34,19 +36,11 @@
           </template>
 
           <v-list dense>
-            <v-list-item v-for="(item, index) in items" :key="index">
-              <v-menu open-on-hover offset-x>
-                <template v-slot:activator="{ on }">
-                  <div v-on="on">{{ item.title }}</div>
-                </template>
-
-                <v-list dense>
-                  <v-list-item v-for="(el, index) in items" :key="index">
-                    <div text>{{ el.title }}</div>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-list-item>
+            <v-row>
+              <v-col cols="6" v-for="(item, index) in categoryList" :key="index">
+                <v-btn small>{{ item.name }}</v-btn>
+              </v-col>
+            </v-row>
           </v-list>
         </v-menu>
       </div>
@@ -79,9 +73,11 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 import Login from "@/components/Login";
 import Register from "@/components/Register";
 import Cart from "@/components/Cart";
+
 export default {
   components: {
     Login,
@@ -94,14 +90,24 @@ export default {
 
   data() {
     return {
-      clickCategory: false,
-      items: [
-        { title: "Click Me 1" },
-        { title: "Click Me 2" },
-        { title: "Click Me 3" },
-        { title: "Click Me 4" }
-      ]
+      clickCategory: false
     };
+  },
+
+  computed: {
+    ...mapState("category", ["categoryList"])
+  },
+
+  methods: {
+    ...mapActions("category", ["getCategoryList"])
   }
 };
 </script>
+
+<style lang="scss">
+.custom-header {
+  a {
+    text-decoration: none !important;
+  }
+}
+</style>

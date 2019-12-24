@@ -26,6 +26,7 @@
                         :icon="!hover"
                         x-small
                         color="transparent"
+                        @click="$emit(`${el.emit}`, item)"
                         v-on="on"
                       >
                         <v-icon
@@ -48,8 +49,12 @@
                   color="orange"
                   size="20px"
                 ></v-rating>
-                <p :class="{'food-name': hover}">{{ item.name }}</p>
-                <p :class="{'food-price': hover}">{{ item.price}} VND</p>
+                <p
+                  :class="{'food-name': hover}"
+                  style="cursor: pointer"
+                  @click="$emit('showStore', item)"
+                >{{ item.name }}</p>
+                <p :class="{'food-price': hover}">{{ item.address }}</p>
               </center>
             </v-card-text>
           </v-card>
@@ -67,16 +72,19 @@ export default {
       icons: [
         {
           icon: "mdi-heart-outline",
-          content: "Yêu thích"
+          content: "Yêu thích",
+          emit: "love"
         },
 
         {
           icon: "mdi-eye",
-          content: "Xem chi tiết"
+          content: "Xem chi tiết",
+          emit: "showStore"
         },
         {
           icon: "mdi-cart-arrow-down",
-          content: "Thêm vào giỏ hàng"
+          content: "Thêm vào giỏ hàng",
+          emit: "addCart"
         }
       ]
     };
