@@ -37,17 +37,43 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="2">
-        <v-card shaped>
+      <v-col cols="2" md="2">
+        <v-card flat class>
           <v-card-title class="layout justify-center">
-            <span class="headline">Thực đơn</span>
+            <span class="headline" >Thực đơn</span>
           </v-card-title>
-
           <v-spacer></v-spacer>
-          <v-card-actions v-for="(item,index) in categories" :key="index">
-            <span class="text-center" color>{{item.name}}</span>
+          <v-card-actions v-for="(item,index) in categories" :key="index" >
+            <span class="text-center">{{item.name}}</span>
           </v-card-actions>
+         
         </v-card>
+      </v-col>
+      <v-col cols="6" md="6">
+        <v-card v-for="(item,index) in categories" :key="index" >
+          <v-simple-table>
+          <thead>
+            <th class="text-left">{{item.name}}</th>
+          </thead>
+          <v-divider vertical light></v-divider>
+          <tbody v-for="(el,index) in item.listDish" :key="index" >
+            <tr>
+              <td class="text-center mx-auto">
+                <v-img class="mx-auto" max-width="100px" max-height="100px" :src="el.src"></v-img>
+              </td>
+              <td class="text-left">{{ el.name }}</td>
+              <td class="text-center">{{ el.price}}VNĐ</td>
+               <td class="text-center">
+                <v-btn depressed color="error" min-width="10px" >
+                  <span>+</span>
+                </v-btn>
+              </td>
+            </tr>
+            <v-divider vertical light></v-divider>
+          </tbody>
+        </v-simple-table>
+        </v-card>
+
       </v-col>
     </v-row>
   </v-container>
@@ -72,10 +98,39 @@ export default {
       },
       categories: [
         {
-          name: "MÓN BÁNH"
+          name: "MÓN BÁNH",
+          listDish: [
+            {
+              id: 1,
+              src: "/images/NewFood/food-4.jpg",
+              name: "Whitehaven Beach",
+              price: "120000"
+            },
+            {
+              id: 2,
+              src: "/images/NewFood/food-1.jpg",
+              name: "Whitehaven Beach",
+              price: "120000",
+            }
+          ]
         },
         {
-          name: "MÓN CHÈ"
+          name: "MÓN CHÈ",
+          listDish: [
+            {
+              id: 3,
+              src: "https://sieungon.com/wp-content/uploads/2018/04/che-thap-cam.jpg",
+              name: "Chè thập cẩm",
+              price: "120000"
+            },
+             {
+              id: 3,
+              src: "https://sieungon.com/wp-content/uploads/2018/04/che-thap-cam.jpg",
+              name: "Chè thập cẩm",
+              price: "120000"
+            },
+           
+          ]
         }
       ]
     };
@@ -105,11 +160,11 @@ export default {
 };
 </script>
 <style scoped>
-.theme--light.v-application {
-  color: darkgoldenrod;
+.v-card__title{
+  color:chocolate;
 }
-.v-application ul {
-  padding-left: 0px;
+.v-card__actions{
+  margin: 10px;
 }
 .name-store {
   color: #464646;
