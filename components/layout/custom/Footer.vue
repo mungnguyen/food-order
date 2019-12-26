@@ -24,7 +24,7 @@
           placeholder="Nhập email của bạn"
         >
           <template slot="append">
-            <v-btn round color="#e49f02">Đăng kí</v-btn>
+            <v-btn rounded color="#e49f02">Đăng kí</v-btn>
           </template>
         </v-text-field>
       </v-col>
@@ -40,7 +40,7 @@
     <v-divider></v-divider>
 
     <v-row>
-      <v-col cols="5" style="display: flex">
+      <v-col cols="7" style="display: flex">
         <div>
           <v-icon color="#fff">mdi-headset</v-icon>
         </div>
@@ -51,7 +51,7 @@
           <h2>(+84) 123 456 789</h2>
           <br />
           <p>
-            Tại B-ORDER, chúng tôi luôn
+            B-ORDER, luôn
             sẵn sàng lắng nghe bạn
           </p>
         </div>
@@ -66,15 +66,38 @@
             <v-icon color="#fff">mdi-home-outline</v-icon>
             <v-icon color="#fff">mdi-motobike</v-icon>
           </div>
+          <br />
+          <v-img width="200px" :src="payments.src"></v-img>
         </div>
       </v-col>
-      <v-col cols="4" style="display: flex">
+      <v-col cols="1" style="display: flex">
         <v-divider vertical hight="100%"></v-divider>
       </v-col>
-      <v-col cols="3">C</v-col>
+      <v-col cols="3" class="text-center">
+        <h4>Địa chỉ công ty</h4>
+        <v-row class="text-left">
+          <v-icon color="#fff">mdi-map-marker</v-icon>&nbsp;
+          <span>BORDER- Keangnam Hanoi Landmark Tower</span>
+        </v-row>
+        <br />
+        <v-row class="text-left">
+          <v-icon color="#fff">mdi-deskphone</v-icon>&nbsp;
+          <span>024356798</span>
+        </v-row>
+        <br />
+        <v-row class="text-left">
+          <v-icon color="#fff">mdi-fax</v-icon>&nbsp;
+          <span>123456</span>
+        </v-row>
+        <br />
+        <v-row class="text-left">
+          <v-icon color="#fff">mdi-email</v-icon>&nbsp;
+          <span>sale@border.com</span>
+        </v-row>
+      </v-col>
     </v-row>
   </div>
-</template>
+</template>s
 
 <script>
 export default {
@@ -86,7 +109,10 @@ export default {
         "mdi-youtube",
         "mdi-google-plus",
         "mdi-instagram"
-      ]
+      ],
+      payments: {
+        src: "/images/payment.png"
+      }
     };
   }
 };
@@ -108,13 +134,11 @@ export default {
       }
     }
   }
-
   .second-content {
     .v-text-field__slot {
       ::placeholder {
         color: gray;
       }
-
       input {
         caret-color: #000;
       }
@@ -123,7 +147,6 @@ export default {
       position: absolute;
       height: 100%;
       right: 0;
-
       .v-btn {
         height: 100%;
         border-radius: 50px;
@@ -132,7 +155,6 @@ export default {
       }
     }
   }
-
   .third-content {
     .button-content {
       position: absolute;
@@ -143,7 +165,6 @@ export default {
           color: rgb(185, 174, 174);
         }
       }
-
       .v-btn.v-btn--fab.theme--dark:hover {
         background-color: #e49f02;
         .v-btn__content {

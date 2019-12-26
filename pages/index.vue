@@ -77,9 +77,12 @@ export default {
     }
   },
 
-  mounted() {
-    localStorage.setItem("cart", JSON.stringify({}));
-    console.log("agvds");
+  watch: {
+    $router(to, from, next) {
+      console.log("to", to);
+      console.log("from", form);
+      next();
+    }
   },
 
   methods: {

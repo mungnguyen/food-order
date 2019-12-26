@@ -60,7 +60,14 @@
 
       <div class="text-transform-none">
         <v-flex>
-          <Login />
+          <v-row justify="center">
+            <v-dialog v-model="dialog" persistent max-width="600px">
+              <template v-slot:activator="{ on }">
+                <v-btn small color="#fff" text v-on="on">Đăng nhập</v-btn>
+              </template>
+              <Login />
+            </v-dialog>
+          </v-row>
         </v-flex>
       </div>
       <v-divider vertical light></v-divider>
@@ -90,6 +97,7 @@ export default {
 
   data() {
     return {
+      dialog: false,
       clickCategory: false
     };
   },

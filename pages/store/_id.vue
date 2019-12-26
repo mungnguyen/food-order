@@ -22,7 +22,7 @@
                 class="rating-store"
                 color="orange darken-2"
                 background-color="orange lighten-3"
-                hover="true"
+                :hover="true"
               ></v-rating>
               <v-card-text>
                 <v-icon>mdi-calendar-clock</v-icon>
@@ -35,15 +35,15 @@
     </v-row>
     <v-row>
       <v-col cols="3">
-        <v-card shaped >
+        <v-card shaped>
           <v-card-title class="layout justify-center" color="orange darken-2">
-            <span class="headline"> Danh mục cửa hàng</span>
+            <span class="headline">Danh mục cửa hàng</span>
           </v-card-title>
-      
-        <v-spacer></v-spacer>
-        <v-card-actions v-for="(item,index) in categories" :key="index">
-          <span>{{item.name}}</span>
-        </v-card-actions>
+
+          <v-spacer></v-spacer>
+          <v-card-actions v-for="(item,index) in categories" :key="index">
+            <span>{{item.name}}</span>
+          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>

@@ -1,169 +1,186 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="5">
-        <v-img class="mx-auto" max-width="500px" max-height="350px" :src="store.url_image"></v-img>
-      </v-col>
-      <v-divider vertical light></v-divider>
-      <v-col cols="5">
-        <div class="store" color="blue-dark">
-          <v-breadcrumbs :items="breadList" divider=">>">
-            <template v-slot:item="props">
-              <v-breadcrumbs-item
-                style="cursor: pointer; color: blue"
-                @click="handleChooseBread(props.item)"
-              >{{ props.item.name }}</v-breadcrumbs-item>
-            </template>
-          </v-breadcrumbs>
-        </div>
-        <v-card class="max-auto" max-width="500px" max-height="350">
-          <v-card-text>
-            <div class="detail-store">
-              <div class="name-store">{{store.name}}</div>
-              <div class="address-store">{{store.address}}</div>
-              <v-rating
-                class="rating-store"
-                color="orange darken-2"
-                background-color="orange lighten-3"
-                hover="true"
-              ></v-rating>
-              <v-card-text>
-                <v-icon>mdi-calendar-clock</v-icon>
-                <label>{{store.open_time}} - {{store.close_time}}</label>
-              </v-card-text>
-            </div>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="2" md="2">
-        <v-card flat class>
-          <v-card-title class="layout justify-center">
-            <span class="headline" >Thực đơn</span>
-          </v-card-title>
-          <v-spacer></v-spacer>
-          <v-card-actions v-for="(item,index) in categories" :key="index" >
-            <span class="text-center">{{item.name}}</span>
-          </v-card-actions>
-         
-        </v-card>
-      </v-col>
-      <v-col cols="6" md="6">
-        <v-card v-for="(item,index) in categories" :key="index" >
-          <v-simple-table>
-          <thead>
-            <th class="text-left">{{item.name}}</th>
-          </thead>
-          <v-divider vertical light></v-divider>
-          <tbody v-for="(el,index) in item.listDish" :key="index" >
-            <tr>
-              <td class="text-center mx-auto">
-                <v-img class="mx-auto" max-width="100px" max-height="100px" :src="el.src"></v-img>
-              </td>
-              <td class="text-left">{{ el.name }}</td>
-              <td class="text-center">{{ el.price}}VNĐ</td>
-               <td class="text-center">
-                <v-btn depressed color="error" min-width="10px" >
-                  <span>+</span>
-                </v-btn>
-              </td>
-            </tr>
-            <v-divider vertical light></v-divider>
-          </tbody>
-        </v-simple-table>
-        </v-card>
+    <!-- Store information -->
+    <StoreInfo />
 
-      </v-col>
-    </v-row>
+    <!-- Store category and dishes -->
+    <CategoryDish @order="handleOrder" />
+
+    <!-- Exit dialog -->
+    <v-dialog v-model="showDialog" width="500">
+      <template v-slot:activator="{ on }">
+        <v-btn color="red lighten-2" dark v-on="on">Click Me</v-btn>
+      </template>
+
+      <v-card>
+        <v-card-title
+          class="headline grey lighten-2"
+          primary-title
+        >Bạn đang chuẩn bị rời khỏi trang này</v-card-title>
+
+        <v-card-text>
+          <br />
+          <p>Nếu bạn rời khỏi trang, thông tin về đơn hàng sẽ bị xóa.</p>
+          <p>Bạn có muốn tiếp tục?</p>
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text color="primary" @click="clickExit">Rời trang</v-btn>
+          <v-btn text @click="clickCancel">Hủy</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- Login dialog -->
+    <v-dialog v-model="login" persistent max-width="600px">
+      <Login @back="login = false" @login="handleLogin" />
+    </v-dialog>
+
+    <!-- Error message -->
+    <v-snackbar v-model="snackbar" top color="#fff" :timeout="timeout">
+      <v-alert text type="error">Email hoặc mật khẩu không chính xác</v-alert>
+    </v-snackbar>
   </v-container>
 </template>
-
 <script>
 import { mapState, mapActions } from "vuex";
+import StoreInfo from "@/components/view-store/StoreInfo";
+import CategoryDish from "@/components/view-store/CategoryDish";
+import Login from "../../components/Login";
+
 export default {
+  components: {
+    StoreInfo,
+    CategoryDish,
+    Login
+  },
+
   data() {
     return {
-      store: {
-        name: "Món ăn Việt - 80 Đại La",
-        email: "kingbbq@gmail.com",
-        password: "123456",
-        phone: 1234567,
-        address: "80 Đại La, Đồng Tâm, Hai Bà Trưng, Hà Nội",
-        url_image:
-          "http://kenh14cdn.com/thumb_w/660/2017/10-crop-1509403824788.jpg",
-        open_time: "6:00",
-        close_time: "18:00",
-        status: "unlock"
-      },
-      categories: [
-        {
-          name: "MÓN BÁNH",
-          listDish: [
-            {
-              id: 1,
-              src: "/images/NewFood/food-4.jpg",
-              name: "Whitehaven Beach",
-              price: "120000"
-            },
-            {
-              id: 2,
-              src: "/images/NewFood/food-1.jpg",
-              name: "Whitehaven Beach",
-              price: "120000",
-            }
-          ]
-        },
-        {
-          name: "MÓN CHÈ",
-          listDish: [
-            {
-              id: 3,
-              src: "https://sieungon.com/wp-content/uploads/2018/04/che-thap-cam.jpg",
-              name: "Chè thập cẩm",
-              price: "120000"
-            },
-             {
-              id: 3,
-              src: "https://sieungon.com/wp-content/uploads/2018/04/che-thap-cam.jpg",
-              name: "Chè thập cẩm",
-              price: "120000"
-            },
-           
-          ]
-        }
-      ]
+      to: null,
+      showDialog: false,
+      login: false,
+      timout: 1000,
+      snackbar: false
     };
   },
 
-  computed: {
-    ...mapState("breadcumbs", ["breadList"])
+  beforeRouteLeave(to, from, next) {
+    console.log("leave");
+    if (this.to) {
+      next();
+    } else {
+      this.to = to;
+      this.showDialog = true;
+    }
   },
 
-  created() {
-    console.log("abc");
-    console.log("id", this.$router.params);
+  computed: {
+    ...mapState("store", ["viewStore"]),
+    ...mapState("category", ["storeCategoryList"])
+  },
+
+  async asyncData({ store, params }) {
+    console.log(params.id);
+    try {
+      await Promise.all([
+        store.dispatch("store/getViewStore", params.id),
+        store.dispatch("category/getStoreCategoryList", {
+          storeId: params.id,
+          pageSize: 6
+        })
+      ]);
+    } catch (err) {
+      console.log("storeId-asyncData", err);
+    }
+  },
+
+  async created() {
+    const id = this.$route.params.id;
+
+    if (!Object.keys(this.viewStore).lenth || !this.storeCategoryList) {
+      try {
+        await Promise.all([
+          this.getViewStore(id),
+          this.getStoreCategoryList({ storeId: id, pageSize: 6 })
+        ]);
+      } catch (err) {
+        console.log("storeId-created", err);
+      }
+    }
+
+    const breadList = [
+      {
+        id: 1,
+        name: "Trang chủ",
+        url: "/"
+      },
+      {
+        id: 2,
+        name: this.viewStore.name,
+        url: `/view-store/${id}`
+      }
+    ];
+    this.setBreadList(breadList);
   },
 
   mounted() {
-    console.log("123", this.$route.params);
+    const _cart = localStorage.getItem("cart");
+    if (_cart === null) {
+      const cart = JSON.stringify({});
+      localStorage.setItem("cart", cart);
+    }
   },
 
   methods: {
-    ...mapActions("breadcumbs", ["goBreadcumbs"]),
+    ...mapActions("breadcumbs", ["setBreadList"]),
+    ...mapActions("store", ["getViewStore"]),
+    ...mapActions("category", ["getStoreCategoryList"]),
+    ...mapActions("custom", ["customLogin"]),
 
-    handleChooseBread(bread) {
-      this.goBreadcumbs(bread.id);
-      this.$router.push(bread.url);
+    clickExit() {
+      localStorage.removeItem("cart");
+      this.$router.push(this.to);
+    },
+
+    clickCancel() {
+      this.to = null;
+      this.showDialog = false;
+    },
+
+    handleOrder() {
+      const _user = localStorage.getItem("user");
+      const user = JSON.parse(_user);
+      if (!user || user.role !== "custom") {
+        this.login = true;
+      }
+    },
+
+    async handleLogin(user) {
+      try {
+        const { isSuccess } = await this.customLogin(user);
+
+        if (isSuccess) {
+          this.to = "/payment";
+          this.$router.push(this.to);
+        } else {
+          this.snackbar = true;
+        }
+      } catch (err) {
+        console.log("handleLogin", err);
+      }
     }
   }
 };
 </script>
 <style scoped>
-.v-card__title{
-  color:chocolate;
+.v-card__title {
+  color: chocolate;
 }
-.v-card__actions{
+.v-card__actions {
   margin: 10px;
 }
 .name-store {

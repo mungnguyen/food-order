@@ -68,16 +68,16 @@ export const actions = {
         }
     },
 
-    viewStore({ state, commit }, storeId) {
+    async getViewStore({ state, commit }, storeId) {
         const { store } = state.api
 
         try {
-            const data = this.$axios.get(`${store}/${storeId}`)
+            const { data } = await this.$axios.$get(`${store}/${storeId}`)
             if (data) {
                 commit("SET_VIEW_STORE", data)
             }
         } catch (err) {
-            console.log("viewStore-store", data)
+            console.log("viewStore-store", err)
         }
     }
 
@@ -85,7 +85,5 @@ export const actions = {
     //     const {inforStore} = state.api
 
     // }
-
-
 
 }
