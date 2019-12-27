@@ -41,6 +41,7 @@ module.exports = {
     modules: [
         // Doc: https://axios.nuxtjs.org/usage
         '@nuxtjs/axios',
+        '@nuxtjs/auth',
     ],
     /*
      ** Axios module configuration
@@ -84,6 +85,6 @@ module.exports = {
         /*
          ** You can extend webpack config here
          */
-        extend(config, ctx) { }
+        extend(config, ctx) {}
     }
 }

@@ -179,9 +179,17 @@ export default {
 
   created() {
     if (process.browser) {
-      const _cart = localStorage.getItem("cart");
-      if (_cart !== null) {
-        const cart = JSON.parse(_cart);
+      const cart = this.$auth.$storage.getUniversal("cart");
+      if (cart !== null) {
+        const dishIdList = Object.keys(cart);
+        let storeId;
+        const id = this.$route.params.id;
+        if (dishIdList.length) {
+          storeId = cart[dishIdList[0]].store_id;
+          if (storeId.toString() !== id.toString()) {
+            this.$auth.$storage.removeUniversal("cart");
+          }
+        }
         this.cart = Object.assign({}, cart);
       }
     }
@@ -189,6 +197,7 @@ export default {
 
   methods: {
     ...mapActions("category", ["getStoreCategoryList"]),
+    ...mapActions("cart", ["setCart"]),
 
     async handleChangeCategory(isGoLeft) {
       const page = isGoLeft
@@ -207,8 +216,7 @@ export default {
     },
 
     addToCart(item) {
-      let _cart = localStorage.getItem("cart");
-      const cart = JSON.parse(_cart);
+      const cart = this.$auth.$storage.getUniversal("cart");
       if (!cart[item.id]) {
         const price =
           parseFloat(item.price) * (1 - parseFloat(Number(item.sale) / 100));
@@ -222,15 +230,12 @@ export default {
       } else {
         cart[item.id].quantity += 1;
       }
-      console.log("cart", cart);
       this.cart = Object.assign({}, cart);
-      _cart = JSON.stringify(cart);
-      localStorage.setItem("cart", _cart);
+      this.$auth.$storage.setUniversal("cart", cart, true);
     },
 
     subFromCart(item) {
-      let _cart = localStorage.getItem("cart");
-      const cart = JSON.parse(_cart);
+      const cart = this.$auth.$storage.getUniversal("cart");
       if (!cart[item.id]);
       else if (cart[item.id].quantity === 1) {
         delete cart[item.id];
@@ -238,17 +243,14 @@ export default {
         cart[item.id].quantity -= 1;
       }
       this.cart = Object.assign({}, cart);
-      _cart = JSON.stringify(cart);
-      localStorage.setItem("cart", _cart);
+      this.$auth.$storage.setUniversal("cart", cart, true);
     },
 
     deleteCartItem(item) {
-      let _cart = localStorage.getItem("cart");
-      const cart = JSON.parse(_cart);
+      const cart = this.$auth.$storage.getUniversal("cart");
       delete cart[item.id];
       this.cart = Object.assign({}, cart);
-      _cart = JSON.stringify(cart);
-      localStorage.setItem("cart", _cart);
+      this.$auth.$storage.setUniversal("cart", cart, true);
     }
   }
 };

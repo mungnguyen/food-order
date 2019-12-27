@@ -1,4 +1,4 @@
-import { set, add, update, remove, removeByIds } from "@/util/actions"
+import {set, add, update, remove, removeByIds } from "@/util/actions"
 
 export const state = () => {
     return {
@@ -36,6 +36,7 @@ export const mutations = {
 
 export const actions = {
     async getCategoryList({ state, commit }, payload) {
+        if (!payload) payload = {}
         const { category } = state.api
 
         payload.page = payload.page !== undefined ? payload.page : 0
@@ -89,6 +90,76 @@ export const actions = {
         } catch (err) {
             console.log("getStoreCategoryList", err)
         }
+    },
+
+    async createCategory({ state, commit }, categoryInfo) {
+        const res = { isSuccess: false }
+        const { category } = state.api
+
+        const token = this.$auth.$storage.getUniversal('token')
+        this.$axios.setHeader('Authorization', "Bearer " + token)
+
+        const user = this.$auth.$storage.getUniversal('user')
+
+        let newCategory = {}
+        if (user.role === "admin") {
+            newCategory = {
+                name: categoryInfo,
+                store_id: null,
+                status: 1
+            }
+        } else if (user.role === "store") {
+            newCategory = {
+                name: categoryInfo,
+                store_id: user.id,
+                status: 0
+            }
+        }
+
+        try {
+            const data = await this.$axios.$post(category, newCategory)
+
+            if (data.success) {
+                res.isSuccess = data.success
+                commit("ADD_CATEGORY", { newEl: data.data })
+                const pagination = {
+                    ...state.pagination,
+                    total: state.pagination.total + 1
+                }
+                commit("SET_PAGINATION", pagination)
+            }
+        } catch (err) {
+            console.log("createCategory", err)
+            res.message = data.message
+        }
+        return res
+    },
+
+    async deleteCategory({ state, commit }, categoryItem) {
+        const res = { isSuccess: false }
+        const { category } = state.api
+
+        const token = this.$auth.$storage.getUniversal('token')
+        this.$axios.setHeader('Authorization', "Bearer " + token)
+
+        try {
+            const data = await this.$axios.$delete(`${category}/${categoryItem.id}`)
+
+            if (data.success) {
+                res.isSuccess = data.success
+                commit("REMOVE_CATEGORY", categoryItem)
+                const pagination = {
+                    ...state.pagination,
+                    total: state.pagination.total - 1
+                }
+                commit("SET_PAGINATION", pagination)
+            }
+        } catch (err) {
+            console.log("createCategory", err)
+            res.message = data.message
+        }
+        return res
+
     }
 
 

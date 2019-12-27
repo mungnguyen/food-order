@@ -3,7 +3,7 @@
     <Header />
 
     <v-content>
-      <v-container fluid class="grey lighten-4 fill-height">
+      <v-container>
         <nuxt />
       </v-container>
     </v-content>
@@ -13,15 +13,12 @@
 </template>
 
 <script>
-import Header from "../components/layout/custom/Header";
+import Header from "@/components/layout/custom/Header";
 import Footer from "@/components/layout/custom/Footer";
 export default {
   components: {
     Header,
     Footer
-  },
-  props: {
-    source: String
   }
 };
 </script>

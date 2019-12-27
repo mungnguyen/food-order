@@ -24,6 +24,11 @@ import NewStore from "@/components/homePage/NewStore";
 import StoreList from "@/components/homePage/StoreList";
 
 export default {
+    layout(ctx) {
+    const user = ctx.$auth.$storage.getUniversal("user")
+    if (user.role === "custom") return "user"
+    return "default"
+  },
   components: {
     Slider,
     NewStore,
@@ -51,17 +56,17 @@ export default {
     ...mapState("category", ["categoryList"])
   },
 
-  // async asyncData({ store }) {
-  //   try {
-  //     await Promise.all([
-  //       store.dispatch("store/getStoreList", { newStore: true }),
-  //       store.dispatch("store/getStoreList", { pageSize: 6 }),
-  //       store.dispatch("category/getCategoryList", { pageSize: 6 })
-  //     ]);
-  //   } catch (err) {
-  //     console.log("indexAsyncData", err);
-  //   }
-  // },
+  async asyncData({ store }) {
+    try {
+      await Promise.all([
+        store.dispatch("store/getStoreList", { newStore: true }),
+        store.dispatch("store/getStoreList", { pageSize: 6 }),
+        store.dispatch("category/getCategoryList", { pageSize: 6 })
+      ]);
+    } catch (err) {
+      console.log("indexAsyncData", err);
+    }
+  },
 
   async created() {
     if (
@@ -89,6 +94,7 @@ export default {
     ...mapActions("store", ["getStoreList"]),
     ...mapActions("breadcumbs", ["setBreadList"]),
     ...mapActions("category", ["getCategoryList"]),
+    ...mapActions("custom", ["setCustom"]),
 
     handleChooseStore(item) {
       const id = this.breadList.length + 1;

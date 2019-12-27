@@ -1,12 +1,17 @@
+import { set } from '@/util/actions'
+
+export const state = () => {
+    return {
+        cart: {}
+    }
+}
+
+export const mutations = {
+    SET_CART: set('cart')
+}
+
 export const actions = {
-    addToCart(dish) {
-        const _cart = localStorage.getItem("cart")
-        const cart = JSON.parse(_cart)
-        if (!cart[dish.store_id]) {
-            cart[dish.store_id] = {
-                dishList: []
-            }
-        }
-        cart[dish.store_id].dishList.push(dish)
+    setCart({ commit }, cart) {
+        commit('SET_CART', cart)
     }
 }

@@ -61,21 +61,21 @@
       <div class="text-transform-none">
         <v-flex>
           <v-row justify="center">
-            <v-dialog v-model="dialog" persistent max-width="600px">
+            <v-dialog v-model="login" persistent max-width="600px">
               <template v-slot:activator="{ on }">
                 <v-btn small color="#fff" text v-on="on">Đăng nhập</v-btn>
               </template>
-              <Login />
+              <Login @back="login = false" @login="handleLogin" />
             </v-dialog>
           </v-row>
         </v-flex>
       </div>
       <v-divider vertical light></v-divider>
     </v-toolbar-items>
-
-    <v-badge>
-      <Cart />
-    </v-badge>
+    <!-- Error message -->
+    <v-snackbar v-model="snackbar" top color="#fff" :timeout="timeout">
+      <v-alert text type="error">Email hoặc mật khẩu không chính xác</v-alert>
+    </v-snackbar>
   </v-app-bar>
 </template>
 
@@ -83,13 +83,11 @@
 import { mapState, mapActions } from "vuex";
 import Login from "@/components/Login";
 import Register from "@/components/Register";
-import Cart from "@/components/Cart";
 
 export default {
   components: {
     Login,
-    Register,
-    Cart
+    Register
   },
   props: {
     source: String
@@ -98,7 +96,10 @@ export default {
   data() {
     return {
       dialog: false,
-      clickCategory: false
+      clickCategory: false,
+      login: false,
+      timeout: 1000,
+      snackbar: false
     };
   },
 
@@ -107,7 +108,22 @@ export default {
   },
 
   methods: {
-    ...mapActions("category", ["getCategoryList"])
+    ...mapActions("category", ["getCategoryList"]),
+    ...mapActions("custom", ["customLogin"]),
+
+    async handleLogin(user) {
+      try {
+        const { isSuccess } = await this.customLogin(user);
+
+        if (isSuccess) {
+          this.login = false;
+        } else {
+          this.snackbar = true;
+        }
+      } catch (err) {
+        console.log("handleLogin", err);
+      }
+    }
   }
 };
 </script>

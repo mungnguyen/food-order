@@ -8,10 +8,6 @@
 
     <!-- Exit dialog -->
     <v-dialog v-model="showDialog" width="500">
-      <template v-slot:activator="{ on }">
-        <v-btn color="red lighten-2" dark v-on="on">Click Me</v-btn>
-      </template>
-
       <v-card>
         <v-card-title
           class="headline grey lighten-2"
@@ -52,6 +48,11 @@ import CategoryDish from "@/components/view-store/CategoryDish";
 import Login from "../../components/Login";
 
 export default {
+  layout(ctx) {
+    const user = ctx.$auth.$storage.getUniversal("user")
+    if (user.role === "custom") return "user"
+    return "default"
+  },
   components: {
     StoreInfo,
     CategoryDish,
@@ -128,10 +129,9 @@ export default {
   },
 
   mounted() {
-    const _cart = localStorage.getItem("cart");
-    if (_cart === null) {
-      const cart = JSON.stringify({});
-      localStorage.setItem("cart", cart);
+    const cart = this.$auth.$storage.getUniversal("cart");
+    if (cart === null) {
+      this.$auth.$storage.setUniversal("cart", {}, true);
     }
   },
 
@@ -142,7 +142,7 @@ export default {
     ...mapActions("custom", ["customLogin"]),
 
     clickExit() {
-      localStorage.removeItem("cart");
+      this.$auth.$storage.removeUniversal("cart");
       this.$router.push(this.to);
     },
 
@@ -152,10 +152,14 @@ export default {
     },
 
     handleOrder() {
-      const _user = localStorage.getItem("user");
-      const user = JSON.parse(_user);
+      const user = this.$auth.$storage.getUniversal("user");
       if (!user || user.role !== "custom") {
         this.login = true;
+      } else {
+        const id = this.$route.params.id;
+        this.$auth.$storage.setUniversal("storeId", id);
+        this.to = "/payment";
+        this.$router.push(this.to);
       }
     },
 
@@ -164,6 +168,8 @@ export default {
         const { isSuccess } = await this.customLogin(user);
 
         if (isSuccess) {
+          const id = this.$route.params.id;
+          this.$auth.$storage.setUniversal("storeId", id);
           this.to = "/payment";
           this.$router.push(this.to);
         } else {

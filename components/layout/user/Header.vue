@@ -21,14 +21,17 @@
       <v-menu bottom left offset-y nudge-top="-8%" dense>
         <template v-slot:activator="{ on }">
           <v-btn background-color="black" icon v-on="on">
-            <span>Admin</span>
+            <span>CUSTOM</span>
             <v-icon color="white">mdi-account-circle</v-icon>
           </v-btn>
         </template>
 
         <v-list dense>
-          <v-list-item v-for="(item, index) in accounts" :key="index">
-            <v-list-item-action>{{item}}</v-list-item-action>
+          <v-list-item v-for="(item, index) in accounts" :key="index" @click="handleClickMenu(index)">
+            <span>
+              <v-icon class="icon">{{item.icon}}</v-icon>
+            </span>
+            <v-list-item-action>{{item.name}}</v-list-item-action>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -38,26 +41,49 @@
 
 <script>
 export default {
-  components: {},
-  props: {
-    source: String
-  },
-
   data() {
     return {
       clickCategory: false,
-      accounts: ["Thông tin tài khoản", "Đăng xuất"]
+      accounts: [
+        {
+          name: "Thông tin tài khoản",
+          icon: "mdi-account-edit"
+        },
+        {
+          name: "Đăng xuất",
+          icon: "mdi-power"
+        }
+      ]
     };
+  },
+
+  methods: {
+      handleClickMenu(index) {
+          if(index === 0) {
+              this.$router.push("/information")
+          } else {
+              this.$auth.$storage.removeUniversal("user")
+              this.$router.push("/")
+          }
+      }
   }
 };
 </script>
 
-<style lang="scss">
+<style scoped>
 .v-btn__content {
   color: white;
 }
 .v-toolbar__content .v-btn.v-btn--icon.v-size--default {
   width: auto;
   padding: 10px;
+}
+.icon {
+  background: orange;
+}
+.food-order
+  .v-menu__content.theme--light.v-menu__content--fixed.menuable__content__active
+  .v-list-item {
+  padding-right: 10px;
 }
 </style>

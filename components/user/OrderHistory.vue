@@ -2,7 +2,17 @@
 <template>
   <v-container>
     <div>
-      <v-card>
+      <Table
+        :headers="headers"
+        :items="orderList"
+        :name="tableName"
+        :iconList="iconList"
+        :pagination="pagination"
+        @changePage="getOrderList($event)"
+        @backHome="handleClickIcon($event, 'backHome')"
+        @showCart="handleClickIcon($event, 'showCart')"
+      />
+      <!-- <v-card>
         <v-card-title class="layout justify-center" color="orange darken-2">
           <span class="headline">Lịch sử đơn hàng</span>
         </v-card-title>
@@ -26,15 +36,22 @@
             </template>
           </v-data-table>
         </div>
-      </v-card>
+      </v-card>-->
     </div>
   </v-container>
 </template>
 <script>
 import { mapState, mapMutations } from "vuex";
+import Table from "@/components/molecules/Table";
 export default {
+  components: {
+    Table
+  },
   data() {
     return {
+      tableName: "Danh sách đơn hàng",
+
+      iconList: [],
       dialog: false,
       status: "Tất cả",
       orders: [
@@ -59,28 +76,17 @@ export default {
         {
           text: "Mã đơn hàng",
           align: "left",
-          value: "order_id"
+          value: "id"
         },
-        {
-          text: "Thời gian",
-          value: "time_order"
-        },
-        {
-          text: "Địa điểm",
-          value: "address_store"
-        },
-        {
-          text: "Tổng tiền",
-          value: "total_price"
-        },
-        {
-          text: "Trạng thái",
-          value: "status_order"
-        }
+        { text: "Người nhận", value: "name_recieve" },
+        { text: "Số điện thoại", value: "phone_recieve" },
+        { text: "Thời gian đặt", value: "time" }
       ]
     };
   },
+
   computed: {
+    ...mapState("order", ["orderList"]),
     filterOrders() {
       return this.orders.filter(i => {
         if (this.status === "Tất cả") return i;
