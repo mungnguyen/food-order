@@ -50,7 +50,8 @@ import Login from "../../components/Login";
 export default {
   layout(ctx) {
     const user = ctx.$auth.$storage.getUniversal("user")
-    if (user.role === "custom") return "user"
+     if(!user) return "default";
+    else if (user.role === "custom") return "user"
     return "default"
   },
   components: {

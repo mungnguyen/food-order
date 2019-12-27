@@ -21,7 +21,7 @@
       <v-menu bottom left offset-y nudge-top="-8%" dense>
         <template v-slot:activator="{ on }">
           <v-btn background-color="black" icon v-on="on">
-            <span>Admin</span>
+            <span>STORE</span>
             <v-icon color="white">mdi-account-circle</v-icon>
           </v-btn>
         </template>
