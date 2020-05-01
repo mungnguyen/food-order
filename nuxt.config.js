@@ -41,12 +41,22 @@ module.exports = {
     modules: [
         // Doc: https://axios.nuxtjs.org/usage
         '@nuxtjs/axios',
+        '@nuxtjs/auth',
     ],
     /*
      ** Axios module configuration
      ** See https://axios.nuxtjs.org/options
      */
-    axios: {},
+    axios: {
+        proxy: 'true'
+    },
+
+    proxy: {
+        '/api/': {
+            target: 'http://localhost:8080/api/',
+            pathRewrite: { '/api/': '' }
+        }
+    },
     /*
      ** vuetify module configuration
      ** https://github.com/nuxt-community/vuetify-module

@@ -1,92 +1,122 @@
 <template>
-  <v-layout
-    column
-    justify-center
-    align-center
-  >
-    <v-flex
-      xs12
-      sm8
-      md6
-    >
-      <div class="text-center">
-        <logo />
-        <vuetify-logo />
-      </div>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>
-            For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-            >
-              documentation
-            </a>.
-          </p>
-          <p>
-            If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              title="chat"
-            >
-              discord
-            </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              title="contribute"
-            >
-              issue board
-            </a>.
-          </p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-          >
-            Nuxt Documentation
-          </a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to="/inspire"
-          >
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-flex>
-  </v-layout>
+  <div class="home">
+    <Slider />
+    <br />
+    <NewStore @showStore="handleChooseStore" />
+    <StoreList @showStore="handleChooseStore" />
+
+    <div>
+      <p>Store List</p>
+      <p
+        v-for="(item, index) in list"
+        :key="index"
+        @click="handleChooseStore(item)"
+        style="cursor: pointer"
+      >{{item.name}}</p>
+    </div>
+  </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import VuetifyLogo from '~/components/VuetifyLogo.vue'
+import { mapActions, mapState } from "vuex";
+import Slider from "@/components/homePage/Slider";
+import NewStore from "@/components/homePage/NewStore";
+import StoreList from "@/components/homePage/StoreList";
 
 export default {
+    layout(ctx) {
+    const user = ctx.$auth.$storage.getUniversal("user")
+    if(!user) return "default"
+   else if (user.role === "custom") return "user"
+    return "default"
+  },
   components: {
-    Logo,
-    VuetifyLogo
+    Slider,
+    NewStore,
+    StoreList
+  },
+
+  data() {
+    return {
+      list: [
+        {
+          id: 1,
+          name: "Món ăn Việt - 80 Đại La"
+        },
+        {
+          id: 2,
+          name: "XYZ"
+        }
+      ]
+    };
+  },
+
+  computed: {
+    ...mapState("store", ["newStoreList", "storeList"]),
+    ...mapState("breadcumbs", ["breadList"]),
+    ...mapState("category", ["categoryList"])
+  },
+
+  async asyncData({ store }) {
+    try {
+      await Promise.all([
+        store.dispatch("store/getStoreList", { newStore: true }),
+        store.dispatch("store/getStoreList", { pageSize: 6 }),
+        store.dispatch("category/getCategoryList", { pageSize: 6 })
+      ]);
+    } catch (err) {
+      console.log("indexAsyncData", err);
+    }
+  },
+
+  async created() {
+    if (
+      !this.newStoreList.length ||
+      !this.storeList.length ||
+      this.categoryList.length
+    ) {
+      await Promise.all([
+        this.getStoreList({ newStore: true }),
+        this.getStoreList({ pageSize: 6 }),
+        this.getCategoryList({ pageSize: 6 })
+      ]);
+    }
+  },
+
+  watch: {
+    $router(to, from, next) {
+      console.log("to", to);
+      console.log("from", form);
+      next();
+    }
+  },
+
+  methods: {
+    ...mapActions("store", ["getStoreList"]),
+    ...mapActions("breadcumbs", ["setBreadList"]),
+    ...mapActions("category", ["getCategoryList"]),
+    ...mapActions("custom", ["setCustom"]),
+
+    handleChooseStore(item) {
+      const id = this.breadList.length + 1;
+      const url = `/view-store/${item.id}`;
+      const breadList = [
+        {
+          id: 1,
+          name: "Trang chủ",
+          url: "/"
+        },
+        { id, name: item.name, url }
+      ];
+      this.setBreadList(breadList);
+      this.$router.push({ path: url });
+    }
   }
-}
+};
 </script>
+
+<style lang="scss" scoped>
+.home {
+  width: 100%;
+}
+</style>
